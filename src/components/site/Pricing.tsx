@@ -9,7 +9,7 @@ const tiers = [
     period: "/mo",
     isCustom: false,
     items: ["Usage-based access.", "No seat fees.", "Public testnet."],
-    cta: "Start Building",
+    cta: "Get API",
     featured: false,
     badge: null,
   },

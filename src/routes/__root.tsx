@@ -44,6 +44,11 @@ export const Route = createRootRoute({
     ],
     links: [
       {
+        rel: "icon",
+        type: "image/png",
+        href: "/Dopemint2/favicon.png",
+      },
+      {
         rel: "preconnect",
         href: "https://fonts.googleapis.com",
       },

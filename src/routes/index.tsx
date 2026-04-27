@@ -42,9 +42,9 @@ function Index() {
       <Product />
       <Runtime />
       <Ecosystem />
-      <Testnet />
       <Developers />
       <Pricing />
+      <Testnet />
       <FinalCTA />
       <Footer />
       <ScrollToTop />

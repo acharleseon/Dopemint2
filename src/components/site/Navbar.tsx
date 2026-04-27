@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import logo from "@/assets/dopamint-logo.png";
 
 const links = [
-  { label: "Protocol", href: "#what" },
-  { label: "Voice", href: "#product" },
-  { label: "Runtime", href: "#runtime" },
+  { label: "Product",    href: "#product" },
   { label: "Developers", href: "#developers" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Ecosystem",  href: "#ecosystem" },
+  { label: "Pricing",    href: "#pricing" },
 ];
 
 export function Navbar() {
@@ -49,7 +48,7 @@ export function Navbar() {
           <img
             src={logo}
             alt="Dopamint"
-            style={{ height: 62, width: "auto", display: "block" }}
+            style={{ height: 44, width: "auto", display: "block" }}
           />
         </a>
 
@@ -100,15 +99,15 @@ export function Navbar() {
           transition: "clip-path 0.5s cubic-bezier(.7,0,.2,1)",
         }}
       >
-        <div className="container-x flex items-center justify-between" style={{ height: 64, borderBottom: "1px solid var(--ink)" }}>
+        <div className="w-full container-x flex items-center justify-between" style={{ height: 64, borderBottom: "1px solid var(--ink)" }}>
           <a href="#" className="flex items-center gap-2">
-            <img src={logo} alt="Dopamint" style={{ height: 54, width: "auto", display: "block" }} />
+            <img src={logo} alt="Dopamint" style={{ height: 40, width: "auto", display: "block" }} />
           </a>
           <button onClick={() => setOpen(false)} aria-label="Close" style={{ border: "1px solid var(--ink)" }} className="p-2">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
-        <nav className="container-x flex flex-col gap-6 pt-12 flex-1">
+        <nav className="w-full container-x flex flex-col items-center gap-6 pt-12 flex-1">
           {links.map((l) => {
             const isActive = activeId === l.href.substring(1);
             return (
@@ -116,21 +115,27 @@ export function Navbar() {
                 key={l.label}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="h-display"
+                className="ulink text-center"
                 style={{ 
-                  fontSize: "clamp(2.5rem, 10vw, 5rem)",
+                  fontFamily: "var(--font-body)",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
                   color: "var(--ink)",
                   textDecoration: isActive ? "underline" : "none",
-                  textDecorationThickness: isActive ? "4px" : "auto",
-                  textUnderlineOffset: "8px",
+                  textDecorationThickness: isActive ? "2px" : "auto",
+                  textUnderlineOffset: "6px",
+                  display: "inline-flex",
+                  justifyContent: "center"
                 }}
               >
                 {l.label}
               </a>
             );
           })}
-          <a href="#testnet" onClick={() => setOpen(false)} className="btn btn-primary mt-4 self-start">
-            Get Started
+          <a href="#testnet" onClick={() => setOpen(false)} className="btn btn-primary mt-4">
+            Get API
           </a>
         </nav>
       </div>

@@ -50,7 +50,10 @@ export function WhatIs() {
               <span className="material-symbols-outlined">help_center</span>
               WHAT IS DOPAMINT
             </span>
-            <ScrambledText as="h2" className="h-section mt-6" text="One API. Infinite identities." />
+            <h2 className="h-section mt-6" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              <ScrambledText as="span" text="One API." />
+              <ScrambledText as="span" text="Infinite identities." />
+            </h2>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 24 }}>
               {["API", "No-code", "Chat Now"].map((b) => (

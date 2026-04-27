@@ -265,26 +265,7 @@
     transition: background 0.15s ease, color 0.15s ease;
   }
 
-  /* ---------- Marquee ---------- */
-  .marquee {
-    overflow: hidden;
-    white-space: nowrap;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-    background: var(--ink);
-    color: var(--primary);
-  }
-  .marquee-track {
-    display: inline-flex;
-    gap: 48px;
-    padding: 14px 0;
-    animation: marquee 28s linear infinite;
-    will-change: transform;
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
+
 
   /* ---------- Reveal on scroll ---------- */
   .reveal {
@@ -379,19 +360,42 @@
   .card-output-hover:hover .output-icon {
     transform: translateY(-4px) rotate(10deg) scale(1.15);
   }
+  /* ---------- Runtime flow dot animation ---------- */
+  .rt-flow-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #0d0d0d;
+    opacity: 0;
+    transform: translateX(-50%) translateY(0px);
+    animation: rt-dot-flow 1s ease-in-out infinite;
+  }
+  @keyframes rt-dot-flow {
+    0%   { opacity: 0;    transform: translateX(-50%) translateY(0px);  }
+    20%  { opacity: 0.35; transform: translateX(-50%) translateY(5px);  }
+    80%  { opacity: 0.25; transform: translateX(-50%) translateY(14px); }
+    100% { opacity: 0;    transform: translateX(-50%) translateY(20px); }
+  }
 }
 
 
 
-  /* ---------- Runtime & WhatIs Component Responsive Styles ---------- */
   @media (max-width: 900px) {
     .stages-grid { grid-template-columns: repeat(3, 1fr) !important; }
     .stage-cell { border-bottom: 1px solid var(--ink) !important; }
+    .rt-layout { grid-template-columns: 1fr !important; }
   }
   @media (max-width: 768px) {
     .wid-grid { grid-template-columns: 1fr !important; }
     .wid-outputs-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .wid-output { border-right: none !important; border-bottom: 1px solid var(--ink); }
+    .creator-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  }
+  @media (max-width: 480px) {
+    .creator-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @media (max-width: 600px) {
     .stages-grid { grid-template-columns: 1fr 1fr !important; }

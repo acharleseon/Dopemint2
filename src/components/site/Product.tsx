@@ -7,12 +7,14 @@ import HoverFlipCard from "./HoverFlipCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 const DOPETWIN_FEATURES = [
-  { title: "Shannon Elizabeth", img: "/dopekin_avatars/ShannonElizabeth.png", hoverImg: "/dopekin_avatars/ShannonElizabeth_Hover.png" },
-  { title: "Blac Chyna", img: "/dopekin_avatars/BlacChyna.png", hoverImg: "/dopekin_avatars/BlacChyna_Hover.png" },
-  { title: "Bhad Bhabie", img: "/dopekin_avatars/BhadBhabie.png", hoverImg: "/dopekin_avatars/BhadBhabie_Hover.png" },
-  { title: "Cardi B", img: "/dopekin_avatars/CardiB.png", hoverImg: "/dopekin_avatars/CardiB_Hover.png" },
-  { title: "Iggy Azalea", img: "/dopekin_avatars/IggyAzalea.png", hoverImg: "/dopekin_avatars/IggyAzalea_Hover.png" },
+  { title: "Shannon Elizabeth", img: `${basePath}/dopekin_avatars/ShannonElizabeth.png`, hoverImg: `${basePath}/dopekin_avatars/ShannonElizabeth_Hover.png` },
+  { title: "Blac Chyna", img: `${basePath}/dopekin_avatars/BlacChyna.png`, hoverImg: `${basePath}/dopekin_avatars/BlacChyna_Hover.png` },
+  { title: "Bhad Bhabie", img: `${basePath}/dopekin_avatars/BhadBhabie.png`, hoverImg: `${basePath}/dopekin_avatars/BhadBhabie_Hover.png` },
+  { title: "Cardi B", img: `${basePath}/dopekin_avatars/CardiB.png`, hoverImg: `${basePath}/dopekin_avatars/CardiB_Hover.png` },
+  { title: "Iggy Azalea", img: `${basePath}/dopekin_avatars/IggyAzalea.png`, hoverImg: `${basePath}/dopekin_avatars/IggyAzalea_Hover.png` },
 ];
 
 function FeatureFace({ src, title }: { src: string; title: string }) {
@@ -53,7 +55,7 @@ export function Product() {
             <span className="material-symbols-outlined">lan</span>
             PRODUCT
           </span>
-          <ScrambledText as="h2" className="h-section mt-6" text="Built on Dopamint Infrastructure" />
+          <ScrambledText as="h2" className="h-section mt-6" text="Built on Dopamint Infra" />
         </div>
 
         <div style={{ marginTop: 56 }}>
@@ -79,7 +81,12 @@ export function Product() {
               <h4 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 3.5vw, 3rem)", color: "var(--ink)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1 }}>
                 For Companion Seekers
               </h4>
-              <div style={{ overflow: "hidden", height: "clamp(280px, 48vw, 420px)" }}>
+              <div style={{ 
+                overflow: "hidden", 
+                height: "clamp(420px, 70vw, 600px)",
+                WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+                maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)"
+              }}>
                 <CoverflowGallery />
               </div>
               <div className="eco-footer-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 32, flexWrap: "wrap", marginTop: 16 }}>
@@ -100,9 +107,16 @@ export function Product() {
               <h4 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 3.5vw, 3rem)", color: "var(--ink)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1 }}>
                 For Creator Revenue
               </h4>
-              <div className="creator-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 8 }}>
+              <div
+                className="creator-grid"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 1fr)",
+                  gap: 12,
+                }}
+              >
                 {DOPETWIN_FEATURES.map((feat) => (
-                  <div key={feat.title} style={{ aspectRatio: "3/4", width: "100%", maxWidth: 220, margin: "0 auto" }}>
+                  <div key={feat.title} style={{ aspectRatio: "2/3", width: "100%" }}>
                     <HoverFlipCard
                       firstContent={<FeatureFace src={feat.img} title={feat.title} />}
                       secondContent={<FeatureFace src={feat.hoverImg} title={feat.title} />}

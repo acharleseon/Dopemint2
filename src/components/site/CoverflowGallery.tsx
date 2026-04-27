@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 const CARDS = [
-  { id: 0, img: "/dopekin_avatars/avatar1.jpg", text: "Call In—I'll keep it smooth, witty, and dangerous." },
-  { id: 1, img: "/dopekin_avatars/avatar2.jpg", text: "He doesn't need thanks—he needs you to keep moving." },
-  { id: 2, img: "/dopekin_avatars/avatar3.jpg", text: "Successful cybersecurity consultant. Hacker." },
-  { id: 3, img: "/dopekin_avatars/avatar4.jpg", text: "Your personal fitness and mentality coach." },
-  { id: 4, img: "/dopekin_avatars/avatar5.jpg", text: "Late night philosopher and deep thinker." },
+  { id: 0, img: `${basePath}/dopekin_avatars/avatar1.jpg`, text: "Call In—I'll keep it smooth, witty, and dangerous." },
+  { id: 1, img: `${basePath}/dopekin_avatars/avatar2.jpg`, text: "He doesn't need thanks—he needs you to keep moving." },
+  { id: 2, img: `${basePath}/dopekin_avatars/avatar3.jpg`, text: "Successful cybersecurity consultant. Hacker." },
+  { id: 3, img: `${basePath}/dopekin_avatars/avatar4.jpg`, text: "Your personal fitness and mentality coach." },
+  { id: 4, img: `${basePath}/dopekin_avatars/avatar5.jpg`, text: "Late night philosopher and deep thinker." },
 ];
 
 export default function CoverflowGallery() {
@@ -29,7 +31,7 @@ export default function CoverflowGallery() {
           
           // Non-linear offsets to ensure mathematically consistent visual overlap
           // regardless of scale, eliminating uneven white space.
-          const xPercent = isActive ? 0 : Math.sign(offset) * (absOffset === 1 ? 75 : 135);
+          const xPercent = isActive ? 0 : Math.sign(offset) * (absOffset === 1 ? 85 : 155);
 
           return (
             <motion.div
@@ -54,14 +56,14 @@ export default function CoverflowGallery() {
                 position: "absolute",
                 top: "50%",
                 left: "50%",
-                width: "min(60%, 260px)",
+                width: "min(72%, 340px)",
                 background: "var(--background)",
                 border: "2px solid var(--ink)",
                 overflow: "hidden",
                 cursor: "pointer",
               }}
             >
-              <div style={{ position: "relative", width: "100%", aspectRatio: "4/5" }}>
+              <div style={{ position: "relative", width: "100%", aspectRatio: "3/5" }}>
                 <img src={card.img} alt={card.text} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "60%", background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)", pointerEvents: "none" }} />
                 {!isActive && <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)", transition: "background 0.3s" }} />}

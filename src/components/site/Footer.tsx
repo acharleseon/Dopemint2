@@ -1,5 +1,5 @@
 import logo from "@/assets/dopamint-logo.png";
-import logoYellow from "@/assets/dopamint-logo-yellow.png";
+import footerLogo from "@/assets/dopamint-logo-footer.png";
 
 const navLinks = [
   { label: "Protocol", href: "#what" },
@@ -16,7 +16,7 @@ export function Footer() {
       <div className="container-x py-14 grid md:grid-cols-2 gap-10">
         {/* Brand */}
         <div>
-          <img src={logoYellow} alt="Dopamint" style={{ height: 120, width: "auto", display: "block" }} />
+          <img src={footerLogo} alt="Dopamint" style={{ height: 80, width: "auto", display: "block" }} />
           <span className="section-label mt-6" style={{ background: "var(--primary)", color: "var(--ink)", borderColor: "var(--primary)" }}>
             POWERED BY $DOPE
           </span>
