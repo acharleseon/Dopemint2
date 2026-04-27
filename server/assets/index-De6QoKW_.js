@@ -1,8 +1,9 @@
 import { jsxs, jsx, Fragment } from "react/jsx-runtime";
-import { useEffect, useRef, useState, createElement } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, useCallback, createElement } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ReactLenis } from "lenis/react";
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll(".reveal");
@@ -219,7 +220,258 @@ function Navbar() {
     }
   );
 }
-const heroBanner = "/Dopemint2/assets/hero-banner-C1C4qxR-.png";
+const heroBanner = "/Dopemint2/assets/hero-2-2bd177bC.png";
+const Cubes = ({
+  gridSize = 10,
+  gridCols,
+  gridRows,
+  cubeSize,
+  maxAngle = 45,
+  radius = 3,
+  easing = "power3.out",
+  duration = { enter: 0.3, leave: 0.6 },
+  cellGap,
+  borderStyle = "1px solid #fff",
+  faceColor = "#120F17",
+  shadow = false,
+  autoAnimate = true,
+  rippleOnClick = true,
+  rippleColor = "#fff",
+  rippleSpeed = 2
+}) => {
+  const sceneRef = useRef(null);
+  const rafRef = useRef(null);
+  const idleTimerRef = useRef(null);
+  const userActiveRef = useRef(false);
+  const simPosRef = useRef({ x: 0, y: 0 });
+  const simTargetRef = useRef({ x: 0, y: 0 });
+  const simRAFRef = useRef(null);
+  const cols = gridCols ?? gridSize;
+  const rows = gridRows ?? gridSize;
+  const colGap = typeof cellGap === "number" ? `${cellGap}px` : cellGap?.col !== void 0 ? `${cellGap.col}px` : "1.5%";
+  const rowGap = typeof cellGap === "number" ? `${cellGap}px` : cellGap?.row !== void 0 ? `${cellGap.row}px` : "1.5%";
+  const enterDur = duration.enter;
+  const leaveDur = duration.leave;
+  const tiltAt = useCallback(
+    (rowCenter, colCenter) => {
+      if (!sceneRef.current) return;
+      sceneRef.current.querySelectorAll(".cube").forEach((cube) => {
+        const el = cube;
+        const r = +(el.dataset.row || 0);
+        const c = +(el.dataset.col || 0);
+        const dist = Math.hypot(r - rowCenter, c - colCenter);
+        if (dist <= radius) {
+          const pct = 1 - dist / radius;
+          const angle = pct * maxAngle;
+          gsap.to(cube, {
+            duration: enterDur,
+            ease: easing,
+            overwrite: true,
+            rotateX: -angle,
+            rotateY: angle
+          });
+        } else {
+          gsap.to(cube, {
+            duration: leaveDur,
+            ease: "power3.out",
+            overwrite: true,
+            rotateX: 0,
+            rotateY: 0
+          });
+        }
+      });
+    },
+    [radius, maxAngle, enterDur, leaveDur, easing]
+  );
+  const onPointerMove = useCallback(
+    (e) => {
+      userActiveRef.current = true;
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      if (!sceneRef.current) return;
+      const rect = sceneRef.current.getBoundingClientRect();
+      const cellW = rect.width / cols;
+      const cellH = rect.height / rows;
+      const colCenter = (e.clientX - rect.left) / cellW;
+      const rowCenter = (e.clientY - rect.top) / cellH;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => tiltAt(rowCenter, colCenter));
+      idleTimerRef.current = setTimeout(() => {
+        userActiveRef.current = false;
+      }, 3e3);
+    },
+    [gridSize, tiltAt]
+  );
+  const resetAll = useCallback(() => {
+    if (!sceneRef.current) return;
+    sceneRef.current.querySelectorAll(".cube").forEach(
+      (cube) => gsap.to(cube, {
+        duration: leaveDur,
+        rotateX: 0,
+        rotateY: 0,
+        ease: "power3.out"
+      })
+    );
+  }, [leaveDur]);
+  const onTouchMove = useCallback(
+    (e) => {
+      userActiveRef.current = true;
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      if (!sceneRef.current) return;
+      const rect = sceneRef.current.getBoundingClientRect();
+      const cellW = rect.width / cols;
+      const cellH = rect.height / rows;
+      const touch = e.touches[0];
+      const colCenter = (touch.clientX - rect.left) / cellW;
+      const rowCenter = (touch.clientY - rect.top) / cellH;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => tiltAt(rowCenter, colCenter));
+      idleTimerRef.current = setTimeout(() => {
+        userActiveRef.current = false;
+      }, 3e3);
+    },
+    [cols, rows, tiltAt]
+  );
+  const onTouchStart = useCallback(() => {
+    userActiveRef.current = true;
+  }, []);
+  const onTouchEnd = useCallback(() => {
+    if (!sceneRef.current) return;
+    resetAll();
+  }, [resetAll]);
+  const onClick = useCallback(
+    (e) => {
+      if (!rippleOnClick || !sceneRef.current) return;
+      const rect = sceneRef.current.getBoundingClientRect();
+      const cellW = rect.width / cols;
+      const cellH = rect.height / rows;
+      let clientX = 0, clientY = 0;
+      if ("touches" in e && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else if ("clientX" in e) {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      const colHit = Math.floor((clientX - rect.left) / cellW);
+      const rowHit = Math.floor((clientY - rect.top) / cellH);
+      const baseRingDelay = 0.15;
+      const baseAnimDur = 0.3;
+      const baseHold = 0.6;
+      const spreadDelay = baseRingDelay / rippleSpeed;
+      const animDuration = baseAnimDur / rippleSpeed;
+      const holdTime = baseHold / rippleSpeed;
+      const rings = {};
+      sceneRef.current.querySelectorAll(".cube").forEach((cube) => {
+        const el = cube;
+        const r = +(el.dataset.row || 0);
+        const c = +(el.dataset.col || 0);
+        const dist = Math.hypot(r - rowHit, c - colHit);
+        const ring = Math.round(dist);
+        if (!rings[ring]) rings[ring] = [];
+        rings[ring].push(el);
+      });
+      Object.keys(rings).map(Number).sort((a, b) => a - b).forEach((ring) => {
+        const delay = ring * spreadDelay;
+        const faces = rings[ring].flatMap((cube) => Array.from(cube.querySelectorAll(".cube-face")));
+        gsap.to(faces, {
+          backgroundColor: rippleColor,
+          duration: animDuration,
+          delay,
+          ease: "power3.out"
+        });
+        gsap.to(faces, {
+          backgroundColor: faceColor,
+          duration: animDuration,
+          delay: delay + animDuration + holdTime,
+          ease: "power3.out"
+        });
+      });
+    },
+    [rippleOnClick, cols, rows, faceColor, rippleColor, rippleSpeed]
+  );
+  useEffect(() => {
+    if (!autoAnimate || !sceneRef.current) return;
+    simPosRef.current = {
+      x: Math.random() * cols,
+      y: Math.random() * rows
+    };
+    simTargetRef.current = {
+      x: Math.random() * cols,
+      y: Math.random() * rows
+    };
+    const speed = 0.06;
+    const loop = () => {
+      if (!userActiveRef.current) {
+        const pos = simPosRef.current;
+        const tgt = simTargetRef.current;
+        pos.x += (tgt.x - pos.x) * speed;
+        pos.y += (tgt.y - pos.y) * speed;
+        tiltAt(pos.y, pos.x);
+        if (Math.hypot(pos.x - tgt.x, pos.y - tgt.y) < 0.1) {
+          simTargetRef.current = {
+            x: Math.random() * cols,
+            y: Math.random() * rows
+          };
+        }
+      }
+      simRAFRef.current = requestAnimationFrame(loop);
+    };
+    simRAFRef.current = requestAnimationFrame(loop);
+    return () => {
+      if (simRAFRef.current != null) {
+        cancelAnimationFrame(simRAFRef.current);
+      }
+    };
+  }, [autoAnimate, cols, rows, tiltAt]);
+  useEffect(() => {
+    const el = sceneRef.current;
+    if (!el) return;
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerleave", resetAll);
+    el.addEventListener("click", onClick);
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerleave", resetAll);
+      el.removeEventListener("click", onClick);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    };
+  }, [onPointerMove, resetAll, onClick, onTouchMove, onTouchStart, onTouchEnd]);
+  const colsArr = Array.from({ length: cols });
+  const rowsArr = Array.from({ length: rows });
+  const sceneStyle = {
+    gridTemplateColumns: cubeSize ? `repeat(${cols}, ${cubeSize}px)` : `repeat(${cols}, 1fr)`,
+    gridTemplateRows: cubeSize ? `repeat(${rows}, ${cubeSize}px)` : `repeat(${rows}, 1fr)`,
+    columnGap: colGap,
+    rowGap
+  };
+  const wrapperStyle = {
+    "--cube-face-border": borderStyle,
+    "--cube-face-bg": faceColor,
+    "--cube-face-shadow": shadow === true ? "0 0 6px rgba(0,0,0,.5)" : shadow || "none",
+    aspectRatio: `${cols} / ${rows}`,
+    ...cubeSize ? {
+      width: `${cols * cubeSize}px`,
+      height: `${rows * cubeSize}px`
+    } : {}
+  };
+  return /* @__PURE__ */ jsx("div", { className: "default-animation", style: wrapperStyle, children: /* @__PURE__ */ jsx("div", { ref: sceneRef, className: "default-animation--scene", style: sceneStyle, children: rowsArr.map(
+    (_, r) => colsArr.map((__, c) => /* @__PURE__ */ jsxs("div", { className: "cube", "data-row": r, "data-col": c, children: [
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--top" }),
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--bottom" }),
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--left" }),
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--right" }),
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--front" }),
+      /* @__PURE__ */ jsx("div", { className: "cube-face cube-face--back" })
+    ] }, `${r}-${c}`))
+  ) }) });
+};
 function Hero() {
   const refLine1 = useScramble("Real-time");
   const refLine2 = useScramble("Infra for");
@@ -282,20 +534,37 @@ function Hero() {
       /* @__PURE__ */ jsx(
         "div",
         {
-          className: "reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0",
-          children: /* @__PURE__ */ jsx(
-            "img",
-            {
-              src: heroBanner,
-              alt: "Dopamint AI companion hero",
-              className: "w-[110%] max-w-[110%] h-auto lg:-translate-x-[8%] lg:scale-105",
-              style: {
-                objectFit: "contain",
-                objectPosition: "center",
-                display: "block"
+          className: "reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0 min-h-[400px] lg:min-h-[600px]",
+          children: /* @__PURE__ */ jsxs("div", { className: "relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105", children: [
+            /* @__PURE__ */ jsx("div", { className: "absolute top-[8%] left-[18%] w-[64%] aspect-[13/3] pointer-events-auto z-0 overflow-visible", children: /* @__PURE__ */ jsx(
+              Cubes,
+              {
+                gridCols: 13,
+                gridRows: 3,
+                maxAngle: 60,
+                radius: 4,
+                borderStyle: "2px solid var(--ink)",
+                faceColor: "var(--primary)",
+                rippleColor: "#fff",
+                rippleSpeed: 1.5,
+                autoAnimate: true,
+                rippleOnClick: true
               }
-            }
-          )
+            ) }),
+            /* @__PURE__ */ jsx(
+              "img",
+              {
+                src: heroBanner,
+                alt: "Dopamint AI companion hero",
+                className: "relative z-10 w-full h-auto pointer-events-none",
+                style: {
+                  objectFit: "contain",
+                  objectPosition: "center",
+                  display: "block"
+                }
+              }
+            )
+          ] })
         }
       )
     ] }),
@@ -318,19 +587,116 @@ function ScrambledText({ text, className, as = "h2", style }) {
   const ref = useScramble(text);
   return createElement(as, { ref, className, style }, text);
 }
+const mentalImg = "/Dopemint2/assets/mental-Ba_1ITWR.png";
+const creatorImg = "/Dopemint2/assets/creator-DD-i4DP6.png";
+const edtechImg = "/Dopemint2/assets/edtech-BM0-ZF2u.png";
+const serviceImg = "/Dopemint2/assets/service-CXWVPiyu.png";
+const useCases = [
+  {
+    title: "Mental Wellbeing",
+    desc: "Dopamint delivers an emotional companion that remembers who you are, tracks patterns over time, and shows up consistently.",
+    icon: "favorite",
+    src: mentalImg
+  },
+  {
+    title: "Creator Economy",
+    desc: "Dopamint turns audience scale into personalised relationships that sustains every conversation, and keeps monetisation running continuously.",
+    icon: "stars",
+    src: creatorImg
+  },
+  {
+    title: "EdTech",
+    desc: "Dopamint gives every learner a persistent AI tutor, one that retains progress, and adapts to gaps.",
+    icon: "school",
+    src: edtechImg
+  },
+  {
+    title: "Service Front",
+    desc: "Dopamint carries full customer history across every session, no repeated context, no cold handoffs, no lost continuity.",
+    icon: "support_agent",
+    src: serviceImg
+  },
+  {
+    title: "and so many more...",
+    isOutro: true
+  }
+];
+const StickyCard = ({
+  i,
+  title,
+  desc,
+  icon,
+  src,
+  isOutro,
+  progress,
+  range,
+  targetScale
+}) => {
+  const container = useRef(null);
+  const scale = useTransform(progress, range, [1, targetScale]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    {
+      ref: container,
+      className: "sticky top-0 flex items-center justify-center w-full h-screen",
+      children: /* @__PURE__ */ jsx(
+        motion.div,
+        {
+          style: {
+            scale,
+            top: `calc(${i * 30}px)`,
+            backgroundColor: "var(--primary)",
+            border: "2px solid var(--ink)",
+            boxShadow: "8px 8px 0px 0px var(--ink)"
+          },
+          className: "relative flex flex-col md:flex-row w-full max-w-[90%] md:max-w-5xl h-auto md:h-[480px] origin-top overflow-hidden",
+          children: isOutro ? /* @__PURE__ */ jsx("div", { className: "w-full h-full flex items-center justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]", children: /* @__PURE__ */ jsx("h3", { style: { fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }, children: title }) }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsx("div", { className: "w-full md:w-[45%] h-64 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-[var(--ink)] bg-white overflow-hidden", children: /* @__PURE__ */ jsx("img", { src, alt: title, className: "w-full h-full object-cover" }) }),
+            /* @__PURE__ */ jsxs("div", { className: "w-full md:w-[55%] flex flex-col justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]", children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 mb-6", children: [
+                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center w-12 h-12 shrink-0 border border-[var(--ink)] bg-[var(--ink)] text-[var(--primary)]", children: /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", style: { fontSize: 24 }, children: icon }) }),
+                /* @__PURE__ */ jsx("h3", { style: { fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", letterSpacing: "-0.02em", lineHeight: 1 }, children: title })
+              ] }),
+              /* @__PURE__ */ jsx("p", { style: { fontFamily: "var(--font-body)", fontSize: "clamp(1rem, 1.5vw, 1.25rem)", color: "var(--ink-soft)", lineHeight: 1.6, fontWeight: 500, margin: 0 }, children: desc })
+            ] })
+          ] })
+        }
+      )
+    }
+  );
+};
+const UseCaseStack = () => {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"]
+  });
+  return /* @__PURE__ */ jsx(ReactLenis, { root: true, children: /* @__PURE__ */ jsx(
+    "div",
+    {
+      ref: container,
+      className: "relative flex w-full flex-col items-center justify-center pt-[5vh] pb-[50vh]",
+      children: useCases.map((useCase, i) => {
+        const targetScale = Math.max(
+          0.85,
+          1 - (useCases.length - i - 1) * 0.05
+        );
+        return /* @__PURE__ */ jsx(
+          StickyCard,
+          {
+            i,
+            ...useCase,
+            progress: scrollYProgress,
+            range: [i * 0.25, 1],
+            targetScale
+          },
+          `uc_${i}`
+        );
+      })
+    }
+  ) });
+};
 gsap.registerPlugin(ScrollTrigger);
-const USE_CASES = [
-  { title: "Mental Wellbeing", icon: "favorite", desc: "Dopamint delivers an emotional companion that remembers who you are, tracks patterns over time, and shows up consistently." },
-  { title: "Creator Economy", icon: "stars", desc: "Dopamint turns audience scale into personalised relationships that sustains every conversation, and keeps monetisation running continuously." },
-  { title: "EdTech", icon: "school", desc: "Dopamint gives every learner a persistent AI tutor, one that retains progress, and adapts to gaps." },
-  { title: "Service Front", icon: "support_agent", desc: "Dopamint carries full customer history across every session, no repeated context, no cold handoffs, no lost continuity." }
-];
-const OUTPUT_TYPES = [
-  { label: "Text", icon: "text_fields", desc: "Generate text responses" },
-  { label: "Image", icon: "image", desc: "Generate images of characters" },
-  { label: "Audio", icon: "graphic_eq", desc: "Generate realistic voices" },
-  { label: "Video", icon: "videocam", desc: "Generate video scenes" }
-];
 function WhatIs() {
   const sectionRef = useRef(null);
   useEffect(() => {
@@ -349,14 +715,6 @@ function WhatIs() {
         duration: 0.5,
         ease: "power3.out",
         scrollTrigger: { trigger: ".wid-grid", start: "top 80%", once: true }
-      });
-      gsap.fromTo(".wid-output", { y: 20, opacity: 0 }, {
-        y: 0,
-        opacity: 1,
-        stagger: 0.08,
-        duration: 0.4,
-        ease: "power2.out",
-        scrollTrigger: { trigger: ".wid-outputs", start: "top 85%", once: true }
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -403,57 +761,7 @@ function WhatIs() {
         /* @__PURE__ */ jsx("p", { style: { fontFamily: "var(--font-body)", fontSize: "1.4rem", color: "var(--ink)", lineHeight: 1.4, fontWeight: 800 }, children: "Dopamint is that layer, already built. Memory, voice, persistent identity wired into your product at runtime. One integration." })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "wid-grid", style: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24, marginBottom: 64 }, children: USE_CASES.map((uc, i) => /* @__PURE__ */ jsxs("div", { className: "wid-card card-yellow-hover", style: {
-      opacity: 0,
-      padding: 40,
-      background: "var(--primary)",
-      border: "1px solid var(--ink)",
-      display: "flex",
-      flexDirection: "column",
-      gap: 20
-    }, children: [
-      /* @__PURE__ */ jsxs("div", { style: { display: "flex", alignItems: "center", gap: 16 }, children: [
-        /* @__PURE__ */ jsx("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 36,
-          height: 36,
-          flexShrink: 0,
-          background: "var(--ink)",
-          border: "1px solid var(--ink)"
-        }, children: /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", style: { fontSize: 18, color: "var(--primary)" }, children: uc.icon }) }),
-        /* @__PURE__ */ jsx("span", { style: {
-          fontFamily: "var(--font-heading)",
-          fontSize: "1.1rem",
-          fontWeight: 800,
-          color: "var(--ink)",
-          letterSpacing: "-0.02em",
-          lineHeight: 1
-        }, children: uc.title })
-      ] }),
-      /* @__PURE__ */ jsx("p", { style: {
-        fontFamily: "var(--font-body)",
-        fontSize: 14,
-        color: "var(--ink-soft)",
-        lineHeight: 1.7,
-        margin: 0,
-        fontWeight: 300
-      }, children: uc.desc })
-    ] }, i)) }),
-    /* @__PURE__ */ jsx("div", { className: "wid-outputs", style: { border: "2px solid var(--ink)", overflow: "hidden" }, children: /* @__PURE__ */ jsx("div", { className: "wid-outputs-grid grid grid-cols-2 md:grid-cols-4 gap-px", style: { background: "var(--ink)" }, children: OUTPUT_TYPES.map((out, i) => /* @__PURE__ */ jsxs("div", { className: "wid-output card-output-hover", style: {
-      opacity: 0,
-      padding: 32,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: 10,
-      background: "#fff"
-    }, children: [
-      /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined output-icon", style: { fontSize: 22, color: "var(--ink)" }, children: out.icon }),
-      /* @__PURE__ */ jsx("span", { style: { fontFamily: "var(--font-heading)", fontSize: "1rem", fontWeight: 800, color: "var(--ink)", letterSpacing: "-0.02em" }, children: out.label }),
-      /* @__PURE__ */ jsx("span", { style: { fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ink-soft)", fontWeight: 300, lineHeight: 1.5 }, children: out.desc })
-    ] }, i)) }) })
+    /* @__PURE__ */ jsx("div", { style: { marginBottom: 64 }, children: /* @__PURE__ */ jsx(UseCaseStack, {}) })
   ] }) });
 }
 const basePath$1 = "/Dopemint2/".replace(/\/$/, "");
@@ -900,6 +1208,7 @@ function Runtime() {
     }
   );
 }
+const mascot = "/Dopemint2/assets/mascot-0WUKXSFs.png";
 const items = [
   { t: "Consumer App Founders", d: "Focus on the experience. Skip rebuilding the core.", icon: "rocket_launch" },
   { t: "Media & IP Owners", d: "Turn characters into interactive entities with memory and voice.", icon: "movie" },
@@ -908,12 +1217,15 @@ const items = [
 ];
 function Ecosystem() {
   return /* @__PURE__ */ jsx("section", { id: "ecosystem", className: "py-24 lg:py-32", style: { borderBottom: "1px solid var(--ink)" }, children: /* @__PURE__ */ jsxs("div", { className: "container-x", children: [
-    /* @__PURE__ */ jsxs("div", { className: "reveal max-w-3xl", children: [
-      /* @__PURE__ */ jsxs("span", { className: "section-label mb-6", children: [
-        /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", children: "hub" }),
-        "ECOSYSTEM"
+    /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative", children: [
+      /* @__PURE__ */ jsxs("div", { className: "reveal max-w-3xl", children: [
+        /* @__PURE__ */ jsxs("span", { className: "section-label mb-6", children: [
+          /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", children: "hub" }),
+          "ECOSYSTEM"
+        ] }),
+        /* @__PURE__ */ jsx(ScrambledText, { as: "h2", className: "h-section mt-6", text: "Who's already building on it." })
       ] }),
-      /* @__PURE__ */ jsx(ScrambledText, { as: "h2", className: "h-section mt-6", text: "Who's already building on it." })
+      /* @__PURE__ */ jsx("div", { className: "hidden md:flex items-center justify-center reveal relative z-10", style: { transform: "translateY(0.5rem)" }, children: /* @__PURE__ */ jsx("img", { src: mascot, alt: "Dopamint Mascot", className: "w-32 lg:w-40 h-auto" }) })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-14", children: items.map((it) => /* @__PURE__ */ jsxs(
       "div",
