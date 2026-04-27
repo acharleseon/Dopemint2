@@ -1,5 +1,7 @@
 import { ScrambledText } from "@/components/kinetic/ScrambledText";
 
+import mascot from "@/assets/mascot.png";
+
 const items = [
   { t: "Consumer App Founders", d: "Focus on the experience. Skip rebuilding the core.", icon: "rocket_launch" },
   { t: "Media & IP Owners", d: "Turn characters into interactive entities with memory and voice.", icon: "movie" },
@@ -11,12 +13,18 @@ export function Ecosystem() {
   return (
     <section id="ecosystem" className="py-24 lg:py-32" style={{ borderBottom: "1px solid var(--ink)" }}>
       <div className="container-x">
-        <div className="reveal max-w-3xl">
-          <span className="section-label mb-6">
-            <span className="material-symbols-outlined">hub</span>
-            ECOSYSTEM
-          </span>
-          <ScrambledText as="h2" className="h-section mt-6" text="Who's already building on it." />
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative">
+          <div className="reveal max-w-3xl">
+            <span className="section-label mb-6">
+              <span className="material-symbols-outlined">hub</span>
+              ECOSYSTEM
+            </span>
+            <ScrambledText as="h2" className="h-section mt-6" text="Who's already building on it." />
+          </div>
+          
+          <div className="hidden md:flex items-center justify-center reveal relative z-10" style={{ transform: "translateY(0.5rem)" }}>
+            <img src={mascot} alt="Dopamint Mascot" className="w-32 lg:w-40 h-auto" />
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-14">

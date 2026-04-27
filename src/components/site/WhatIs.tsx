@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrambledText } from "@/components/kinetic/ScrambledText";
+import { UseCaseStack } from "./UseCaseStack";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,13 +11,6 @@ const USE_CASES = [
   { title: "Creator Economy", icon: "stars", desc: "Dopamint turns audience scale into personalised relationships that sustains every conversation, and keeps monetisation running continuously." },
   { title: "EdTech", icon: "school", desc: "Dopamint gives every learner a persistent AI tutor, one that retains progress, and adapts to gaps." },
   { title: "Service Front", icon: "support_agent", desc: "Dopamint carries full customer history across every session, no repeated context, no cold handoffs, no lost continuity." },
-];
-
-const OUTPUT_TYPES = [
-  { label: "Text", icon: "text_fields", desc: "Generate text responses" },
-  { label: "Image", icon: "image", desc: "Generate images of characters" },
-  { label: "Audio", icon: "graphic_eq", desc: "Generate realistic voices" },
-  { label: "Video", icon: "videocam", desc: "Generate video scenes" },
 ];
 
 export function WhatIs() {
@@ -33,10 +27,7 @@ export function WhatIs() {
         y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power3.out",
         scrollTrigger: { trigger: ".wid-grid", start: "top 80%", once: true },
       });
-      gsap.fromTo(".wid-output", { y: 20, opacity: 0 }, {
-        y: 0, opacity: 1, stagger: 0.08, duration: 0.4, ease: "power2.out",
-        scrollTrigger: { trigger: ".wid-outputs", start: "top 85%", once: true },
-      });
+
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -85,57 +76,12 @@ export function WhatIs() {
           </div>
         </div>
 
-        {/* Use Case Cards */}
-        <div className="wid-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24, marginBottom: 64 }}>
-          {USE_CASES.map((uc, i) => (
-            <div key={i} className="wid-card card-yellow-hover" style={{
-              opacity: 0, padding: 40, background: "var(--primary)",
-              border: "1px solid var(--ink)", display: "flex", flexDirection: "column", gap: 20,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 36, height: 36, flexShrink: 0,
-                  background: "var(--ink)", border: "1px solid var(--ink)",
-                }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 18, color: "var(--primary)" }}>{uc.icon}</span>
-                </div>
-                <span style={{
-                  fontFamily: "var(--font-heading)", fontSize: "1.1rem",
-                  fontWeight: 800, color: "var(--ink)", letterSpacing: "-0.02em", lineHeight: 1,
-                }}>
-                  {uc.title}
-                </span>
-              </div>
-              <p style={{
-                fontFamily: "var(--font-body)", fontSize: 14,
-                color: "var(--ink-soft)", lineHeight: 1.7, margin: 0, fontWeight: 300,
-              }}>
-                {uc.desc}
-              </p>
-            </div>
-          ))}
+        {/* Use Case Cards Stack */}
+        <div style={{ marginBottom: 64 }}>
+          <UseCaseStack />
         </div>
 
-        {/* Output Types */}
-        <div className="wid-outputs" style={{ border: "2px solid var(--ink)", overflow: "hidden" }}>
-          <div className="wid-outputs-grid grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "var(--ink)" }}>
-            {OUTPUT_TYPES.map((out, i) => (
-              <div key={i} className="wid-output card-output-hover" style={{
-                opacity: 0, padding: 32,
-                display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10, background: "#fff",
-              }}>
-                <span className="material-symbols-outlined output-icon" style={{ fontSize: 22, color: "var(--ink)" }}>{out.icon}</span>
-                <span style={{ fontFamily: "var(--font-heading)", fontSize: "1rem", fontWeight: 800, color: "var(--ink)", letterSpacing: "-0.02em" }}>
-                  {out.label}
-                </span>
-                <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ink-soft)", fontWeight: 300, lineHeight: 1.5 }}>
-                  {out.desc}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
 
     </section>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useScramble } from "@/hooks/use-kinetic";
-import heroBanner from "@/assets/hero-banner.png";
+import heroBanner from "@/assets/hero-2.png";
+import Cubes from "@/components/ui/Cubes";
 
 export function Hero() {
   const refLine1 = useScramble<HTMLSpanElement>("Real-time");
@@ -67,18 +68,36 @@ export function Hero() {
 
         {/* RIGHT — Hero banner image */}
         <div
-          className="reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0"
+          className="reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0 min-h-[400px] lg:min-h-[600px]"
         >
-          <img
-            src={heroBanner}
-            alt="Dopamint AI companion hero"
-            className="w-[110%] max-w-[110%] h-auto lg:-translate-x-[8%] lg:scale-105"
-            style={{
-              objectFit: "contain",
-              objectPosition: "center",
-              display: "block",
-            }}
-          />
+          <div className="relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105">
+            {/* CUBES BACKGROUND */}
+            <div className="absolute top-[8%] left-[18%] w-[64%] aspect-[13/3] pointer-events-auto z-0 overflow-visible">
+               <Cubes 
+                 gridCols={13}
+                 gridRows={3}
+                 maxAngle={60}
+                 radius={4}
+                 borderStyle="2px solid var(--ink)"
+                 faceColor="var(--primary)"
+                 rippleColor="#fff"
+                 rippleSpeed={1.5}
+                 autoAnimate={true}
+                 rippleOnClick={true}
+               />
+            </div>
+            
+            <img
+              src={heroBanner}
+              alt="Dopamint AI companion hero"
+              className="relative z-10 w-full h-auto pointer-events-none"
+              style={{
+                objectFit: "contain",
+                objectPosition: "center",
+                display: "block",
+              }}
+            />
+          </div>
         </div>
       </div>
 
