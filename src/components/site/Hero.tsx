@@ -72,14 +72,14 @@ export function Hero() {
         >
           <div className="relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105">
             {/* CUBES BACKGROUND */}
-            <div className="absolute top-[8%] left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible">
+            <div className="hero-cubes absolute top-[8%] left-[12%] md:left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible">
                <Cubes 
                  gridCols={13}
                  gridRows={3}
                  cellGap={15}
                  maxAngle={60}
                  radius={4}
-                 borderStyle="2px solid var(--ink)"
+                 borderStyle="var(--hero-cube-stroke)"
                  faceColor="var(--primary)"
                  rippleColor="#fff"
                  rippleSpeed={1.5}
