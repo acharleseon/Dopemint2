@@ -88,7 +88,7 @@ function useScramble(text) {
   }, [text]);
   return ref;
 }
-const logo = "/Dopemint2/assets/dopamint-logo-Bb6EnQkt.png";
+const logo = "/assets/dopamint-logo-Bb6EnQkt.png";
 const links = [
   { label: "Product", href: "#product" },
   { label: "Developers", href: "#developers" },
@@ -220,7 +220,7 @@ function Navbar() {
     }
   );
 }
-const heroBanner = "/Dopemint2/assets/hero-2-2bd177bC.png";
+const heroBanner = "/assets/hero-2-2bd177bC.png";
 const Cubes = ({
   gridSize = 10,
   gridCols,
@@ -536,7 +536,7 @@ function Hero() {
         {
           className: "reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0 min-h-[400px] lg:min-h-[600px]",
           children: /* @__PURE__ */ jsxs("div", { className: "relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105", children: [
-            /* @__PURE__ */ jsx("div", { className: "absolute top-[8%] left-[18%] w-[64%] aspect-[13/3] pointer-events-auto z-0 overflow-visible", children: /* @__PURE__ */ jsx(
+            /* @__PURE__ */ jsx("div", { className: "absolute top-[8%] left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible", children: /* @__PURE__ */ jsx(
               Cubes,
               {
                 gridCols: 13,
@@ -568,7 +568,7 @@ function Hero() {
         }
       )
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "marquee flex overflow-hidden border-y border-y-[var(--ink)] bg-[var(--ink)] text-[var(--primary)] py-3.5", children: /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx("div", { className: "marquee flex overflow-hidden border-y border-y-ink bg-ink text-primary py-3.5", children: /* @__PURE__ */ jsx(
       motion.div,
       {
         className: "flex w-max",
@@ -587,10 +587,10 @@ function ScrambledText({ text, className, as = "h2", style }) {
   const ref = useScramble(text);
   return createElement(as, { ref, className, style }, text);
 }
-const mentalImg = "/Dopemint2/assets/mental-Ba_1ITWR.png";
-const creatorImg = "/Dopemint2/assets/creator-DD-i4DP6.png";
-const edtechImg = "/Dopemint2/assets/edtech-BM0-ZF2u.png";
-const serviceImg = "/Dopemint2/assets/service-CXWVPiyu.png";
+const mentalImg = "/assets/mental-Ba_1ITWR.png";
+const creatorImg = "/assets/creator-DD-i4DP6.png";
+const edtechImg = "/assets/edtech-BM0-ZF2u.png";
+const serviceImg = "/assets/service-CXWVPiyu.png";
 const useCases = [
   {
     title: "Mental Wellbeing",
@@ -650,11 +650,11 @@ const StickyCard = ({
             boxShadow: "8px 8px 0px 0px var(--ink)"
           },
           className: "relative flex flex-col md:flex-row w-full max-w-[90%] md:max-w-5xl h-auto md:h-[480px] origin-top overflow-hidden",
-          children: isOutro ? /* @__PURE__ */ jsx("div", { className: "w-full h-full flex items-center justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]", children: /* @__PURE__ */ jsx("h3", { style: { fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }, children: title }) }) : /* @__PURE__ */ jsxs(Fragment, { children: [
-            /* @__PURE__ */ jsx("div", { className: "w-full md:w-[45%] h-64 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-[var(--ink)] bg-white overflow-hidden", children: /* @__PURE__ */ jsx("img", { src, alt: title, className: "w-full h-full object-cover" }) }),
-            /* @__PURE__ */ jsxs("div", { className: "w-full md:w-[55%] flex flex-col justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]", children: [
+          children: isOutro ? /* @__PURE__ */ jsx("div", { className: "w-full h-full flex items-center justify-center p-8 md:p-14 bg-primary text-ink", children: /* @__PURE__ */ jsx("h3", { style: { fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }, children: title }) }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsx("div", { className: "w-full md:w-[45%] h-64 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-ink bg-white overflow-hidden", children: /* @__PURE__ */ jsx("img", { src, alt: title, className: "w-full h-full object-cover" }) }),
+            /* @__PURE__ */ jsxs("div", { className: "w-full md:w-[55%] flex flex-col justify-center p-8 md:p-14 bg-primary text-ink", children: [
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 mb-6", children: [
-                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center w-12 h-12 shrink-0 border border-[var(--ink)] bg-[var(--ink)] text-[var(--primary)]", children: /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", style: { fontSize: 24 }, children: icon }) }),
+                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center w-12 h-12 shrink-0 border border-ink bg-ink text-primary", children: /* @__PURE__ */ jsx("span", { className: "material-symbols-outlined", style: { fontSize: 24 }, children: icon }) }),
                 /* @__PURE__ */ jsx("h3", { style: { fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", letterSpacing: "-0.02em", lineHeight: 1 }, children: title })
               ] }),
               /* @__PURE__ */ jsx("p", { style: { fontFamily: "var(--font-body)", fontSize: "clamp(1rem, 1.5vw, 1.25rem)", color: "var(--ink-soft)", lineHeight: 1.6, fontWeight: 500, margin: 0 }, children: desc })
@@ -764,7 +764,7 @@ function WhatIs() {
     /* @__PURE__ */ jsx("div", { style: { marginBottom: 64 }, children: /* @__PURE__ */ jsx(UseCaseStack, {}) })
   ] }) });
 }
-const basePath$1 = "/Dopemint2/".replace(/\/$/, "");
+const basePath$1 = "/".replace(/\/$/, "");
 const CARDS = [
   { id: 0, img: `${basePath$1}/dopekin_avatars/avatar1.jpg`, text: "Call In—I'll keep it smooth, witty, and dangerous." },
   { id: 1, img: `${basePath$1}/dopekin_avatars/avatar2.jpg`, text: "He doesn't need thanks—he needs you to keep moving." },
@@ -877,7 +877,7 @@ function HoverFlipCard({ firstContent, secondContent }) {
   );
 }
 gsap.registerPlugin(ScrollTrigger);
-const basePath = "/Dopemint2/".replace(/\/$/, "");
+const basePath = "/".replace(/\/$/, "");
 const DOPETWIN_FEATURES = [
   { title: "Shannon Elizabeth", img: `${basePath}/dopekin_avatars/ShannonElizabeth.png`, hoverImg: `${basePath}/dopekin_avatars/ShannonElizabeth_Hover.png` },
   { title: "Blac Chyna", img: `${basePath}/dopekin_avatars/BlacChyna.png`, hoverImg: `${basePath}/dopekin_avatars/BlacChyna_Hover.png` },
@@ -983,7 +983,7 @@ function Product() {
     ] })
   ] }) });
 }
-const runtimeDiagram = "/Dopemint2/assets/runtime-diagram-MhMFncq2.png";
+const runtimeDiagram = "/assets/runtime-diagram-MhMFncq2.png";
 gsap.registerPlugin(ScrollTrigger);
 const FLOW = [
   { icon: "mic", label: "LIVE VOICE" },
@@ -1208,7 +1208,7 @@ function Runtime() {
     }
   );
 }
-const mascot = "/Dopemint2/assets/mascot-0WUKXSFs.png";
+const mascot = "/assets/mascot-0WUKXSFs.png";
 const items = [
   { t: "Consumer App Founders", d: "Focus on the experience. Skip rebuilding the core.", icon: "rocket_launch" },
   { t: "Media & IP Owners", d: "Turn characters into interactive entities with memory and voice.", icon: "movie" },
@@ -1747,7 +1747,7 @@ function FinalCTA() {
     }
   );
 }
-const footerLogo = "/Dopemint2/assets/dopamint-logo-footer-DVu1UEy_.png";
+const footerLogo = "/assets/dopamint-logo-footer-DVu1UEy_.png";
 const navLinks = [
   { label: "Protocol", href: "#what" },
   { label: "Voice", href: "#product" },

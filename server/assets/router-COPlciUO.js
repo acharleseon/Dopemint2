@@ -1,6 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { createRootRoute, Link, Outlet, HeadContent, Scripts, createFileRoute, lazyRouteComponent, createRouter, useRouter } from "@tanstack/react-router";
-const appCss = "/Dopemint2/assets/styles-CRNJ5-Cl.css";
+const appCss = "/assets/styles-BeDQIqg5.css";
 function NotFoundComponent() {
   return /* @__PURE__ */ jsx("div", { className: "flex min-h-screen items-center justify-center bg-background px-4", children: /* @__PURE__ */ jsxs("div", { className: "max-w-md text-center", children: [
     /* @__PURE__ */ jsx("h1", { className: "text-7xl font-bold text-foreground", children: "404" }),
@@ -79,7 +79,7 @@ function RootShell({ children }) {
 function RootComponent() {
   return /* @__PURE__ */ jsx(Outlet, {});
 }
-const $$splitComponentImporter = () => import("./index-De6QoKW_.js");
+const $$splitComponentImporter = () => import("./index-BU3DQwqq.js");
 const Route = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter, "component"),
   head: () => ({
