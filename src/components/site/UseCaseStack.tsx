@@ -78,7 +78,7 @@ const StickyCard = ({
         className="relative flex flex-col md:flex-row w-full max-w-[90%] md:max-w-5xl h-auto md:h-[480px] origin-top overflow-hidden"
       >
         {isOutro ? (
-          <div className="w-full h-full flex items-center justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]">
+          <div className="w-full h-full flex items-center justify-center p-8 md:p-14 bg-primary text-ink">
             <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }}>
               {title}
             </h3>
@@ -86,14 +86,14 @@ const StickyCard = ({
         ) : (
           <>
             {/* LEFT: Image */}
-            <div className="w-full md:w-[45%] h-64 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-[var(--ink)] bg-white overflow-hidden">
+            <div className="w-full md:w-[45%] h-64 md:h-full border-b-2 md:border-b-0 md:border-r-2 border-ink bg-white overflow-hidden">
               <img src={src} alt={title} className="w-full h-full object-cover" />
             </div>
             
             {/* RIGHT: Content */}
-            <div className="w-full md:w-[55%] flex flex-col justify-center p-8 md:p-14 bg-[var(--primary)] text-[var(--ink)]">
+            <div className="w-full md:w-[55%] flex flex-col justify-center p-8 md:p-14 bg-primary text-ink">
               <div className="flex items-center gap-4 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 shrink-0 border border-[var(--ink)] bg-[var(--ink)] text-[var(--primary)]">
+                <div className="flex items-center justify-center w-12 h-12 shrink-0 border border-ink bg-ink text-primary">
                   <span className="material-symbols-outlined" style={{ fontSize: 24 }}>{icon}</span>
                 </div>
                 <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", letterSpacing: "-0.02em", lineHeight: 1 }}>

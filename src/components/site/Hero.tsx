@@ -72,7 +72,7 @@ export function Hero() {
         >
           <div className="relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105">
             {/* CUBES BACKGROUND */}
-            <div className="absolute top-[8%] left-[18%] w-[64%] aspect-[13/3] pointer-events-auto z-0 overflow-visible">
+            <div className="absolute top-[8%] left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible">
                <Cubes 
                  gridCols={13}
                  gridRows={3}
@@ -102,7 +102,7 @@ export function Hero() {
       </div>
 
       {/* Marquee */}
-      <div className="marquee flex overflow-hidden border-y border-y-[var(--ink)] bg-[var(--ink)] text-[var(--primary)] py-3.5">
+      <div className="marquee flex overflow-hidden border-y border-y-ink bg-ink text-primary py-3.5">
         <motion.div
           className="flex w-max"
           style={{ fontFamily: "var(--font-body)", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", fontSize: 13 }}
