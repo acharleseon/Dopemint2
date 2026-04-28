@@ -122,7 +122,7 @@ export const UseCaseStack = () => {
     <ReactLenis root>
       <div
         ref={container}
-        className="relative flex w-full flex-col items-center justify-center pt-[5vh] pb-[50vh]"
+        className="relative flex w-full flex-col items-center justify-center pt-[5vh] pb-[5vh]"
       >
         {useCases.map((useCase, i) => {
           const targetScale = Math.max(

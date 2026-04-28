@@ -11,8 +11,9 @@ export default defineConfig({
   },
   cloudflare: false,
   tanstackStart: {
-    server: {
-      preset: "vercel"
+    prerender: {
+      routes: ['/'],
+      crawlLinks: true
     }
   }
 });

@@ -102,28 +102,53 @@ export function Runtime() {
       );
 
       // ── Sequential glow loop — starts after entrance completes ──
-      // Each pill: 0.25s ramp up → 0.5s hold → 0.25s fade → next pill
-      const GLOW_RAMP = 0.3;
-      const GLOW_HOLD = 0.5;
-      const GLOW_FADE = 0.3;
-      const GLOW_ON  = "0 0 20px 6px rgba(255,255,255,0.55)";
-      const GLOW_OFF = "0 0 0px 0px rgba(255,255,255,0)";
+      const GLOW_RAMP = 0.4;
+      const GLOW_HOLD = 0.8;
+      const GLOW_ON  = "0 10px 25px -5px rgba(255,255,255,0.6)";
+      const GLOW_OFF = "0 0px 0px 0px rgba(255,255,255,0)";
 
       glowTimerRef.current = setTimeout(() => {
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.15 });
+        const tl = gsap.timeline({ repeat: -1 });
 
-        pillRefs.current.forEach((el) => {
+        pillRefs.current.forEach((el, index) => {
           if (!el) return;
+          
+          const others = pillRefs.current.filter((_, i) => i !== index);
+
+          // Highlight the current pill
           tl.to(el, {
             boxShadow: GLOW_ON,
+            y: -4,
+            scale: 1.02,
+            opacity: 1,
             duration: GLOW_RAMP,
-            ease: "power1.out",
-          })
-            .to(el, {
+            ease: "power2.out",
+          }, "+=0");
+          
+          // Lowlight the others simultaneously
+          if (index === 0) {
+            tl.to(others, {
+              opacity: 0.4,
               boxShadow: GLOW_OFF,
-              duration: GLOW_FADE,
-              ease: "power1.in",
-            }, `+=${GLOW_HOLD}`);
+              y: 0,
+              scale: 1,
+              duration: GLOW_RAMP,
+              ease: "power2.out",
+            }, "<");
+          } else {
+             const prev = pillRefs.current[index - 1];
+             tl.to(prev, {
+                opacity: 0.4,
+                boxShadow: GLOW_OFF,
+                y: 0,
+                scale: 1,
+                duration: GLOW_RAMP,
+                ease: "power2.out"
+             }, "<");
+          }
+
+          // Hold the state for reading
+          tl.to({}, { duration: GLOW_HOLD });
         });
 
         glowTlRef.current = tl;

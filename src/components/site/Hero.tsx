@@ -76,6 +76,7 @@ export function Hero() {
                <Cubes 
                  gridCols={13}
                  gridRows={3}
+                 cellGap={15}
                  maxAngle={60}
                  radius={4}
                  borderStyle="2px solid var(--ink)"
