@@ -9,8 +9,8 @@ import serviceImg from "@/assets/usecases/service.png";
 
 const useCases = [
   {
-    title: "Mental Wellbeing",
-    desc: "Dopamint delivers an emotional companion that remembers who you are, tracks patterns over time, and shows up consistently.",
+    title: "Companion Application",
+    desc: "Dopamint gives companions the one thing they've always lacked, continuity. Same personality, same memory, same presence. Every session feels like it never ended.",
     icon: "favorite",
     src: mentalImg,
   },

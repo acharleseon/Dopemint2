@@ -7,7 +7,7 @@ import { UseCaseStack } from "./UseCaseStack";
 gsap.registerPlugin(ScrollTrigger);
 
 const USE_CASES = [
-  { title: "Mental Wellbeing", icon: "favorite", desc: "Dopamint delivers an emotional companion that remembers who you are, tracks patterns over time, and shows up consistently." },
+  { title: "Companion Application", icon: "favorite", desc: "Dopamint gives companions the one thing they've always lacked, continuity. Same personality, same memory, same presence. Every session feels like it never ended." },
   { title: "Creator Economy", icon: "stars", desc: "Dopamint turns audience scale into personalised relationships that sustains every conversation, and keeps monetisation running continuously." },
   { title: "EdTech", icon: "school", desc: "Dopamint gives every learner a persistent AI tutor, one that retains progress, and adapts to gaps." },
   { title: "Service Front", icon: "support_agent", desc: "Dopamint carries full customer history across every session, no repeated context, no cold handoffs, no lost continuity." },
