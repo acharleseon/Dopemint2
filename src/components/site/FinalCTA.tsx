@@ -12,40 +12,33 @@ export function FinalCTA() {
         <div className="reveal flex flex-col items-center">
 
           {/* Two tight lines grouped together */}
-          <div style={{ marginBottom: "28px" }}>
+          <div style={{
+            marginBottom: "28px",
+            fontFamily: "var(--font-heading)",
+            fontSize: "clamp(1.4rem, 3vw, 2rem)",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            color: "rgba(13,13,13,0.85)",
+            lineHeight: 1.25,
+          }}>
             <ScrambledText
-              as="p"
-              text="Hiring a whole team to build companion infra?"
-              style={{
-                fontFamily: "var(--font-heading)",
-                fontSize: "clamp(1.4rem, 3vw, 2rem)",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "rgba(13,13,13,0.85)",
-                margin: 0,
-                lineHeight: 1.25,
-              }}
+              as="div"
+              text="still duct-taping memory into your"
+              style={{ margin: 0 }}
             />
-            <ScrambledText
-              as="p"
-              text="who are you kidding."
-              style={{
-                fontFamily: "var(--font-heading)",
-                fontSize: "clamp(1.4rem, 3vw, 2rem)",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "rgba(13,13,13,0.85)",
-                margin: 0,
-                lineHeight: 1.25,
-              }}
-            />
+            <div style={{ margin: 0 }}>
+              <ScrambledText as="span" text="Ai companion build? " />
+              <strong style={{ fontWeight: 900, color: "var(--ink)" }}>
+                <ScrambledText as="span" text="There's an API for that." />
+              </strong>
+            </div>
           </div>
 
           {/* Big punchline heading */}
           <ScrambledText
             as="h2"
             className="h-section"
-            text="we're one integration."
+            text="get dopamint"
             style={{ margin: 0, marginBottom: "36px" }}
           />
 

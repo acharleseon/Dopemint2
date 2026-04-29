@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ReactLenis } from "lenis/react";
 import { useRef } from "react";
 
-import mentalImg from "@/assets/usecases/mental.png";
+import mentalImg from "@/assets/usecases/companion.jpeg";
 import creatorImg from "@/assets/usecases/creator.png";
 import edtechImg from "@/assets/usecases/edtech.png";
 import serviceImg from "@/assets/usecases/service.png";
