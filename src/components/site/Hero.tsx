@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useScramble } from "@/hooks/use-kinetic";
-import heroBanner from "@/assets/hero-2.png";
+
 import Cubes from "@/components/ui/Cubes";
+import LiquidChrome from "@/components/ui/LiquidChrome";
 
 export function Hero() {
   const refLine1 = useScramble<HTMLSpanElement>("Real-time");
@@ -68,11 +69,11 @@ export function Hero() {
 
         {/* RIGHT — Hero banner image */}
         <div
-          className="reveal relative w-full flex items-center justify-center pt-8 sm:px-4 lg:px-0 lg:pt-0 min-h-[400px] lg:min-h-[600px]"
+          className="reveal relative w-full flex items-center justify-center pt-16 pb-12 sm:px-4 md:pt-32 md:pb-20 lg:px-0 lg:pt-0 lg:pb-0 min-h-[400px] lg:min-h-[600px]"
         >
-          <div className="relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105">
+          <div className="relative w-[110%] max-w-[110%] lg:-translate-x-[8%] lg:scale-105 translate-y-8 lg:translate-y-16">
             {/* CUBES BACKGROUND */}
-            <div className="hero-cubes absolute top-[8%] left-[12%] md:left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible">
+            <div className="hero-cubes absolute top-[0%] left-[12%] md:left-[18%] w-[64%] aspect-13/3 pointer-events-auto z-0 overflow-visible hidden">
                <Cubes 
                  gridCols={13}
                  gridRows={3}
@@ -87,17 +88,44 @@ export function Hero() {
                  rippleOnClick={true}
                />
             </div>
+
+            {/* LIQUID CHROME CIRCLE */}
+            <div 
+              className="absolute z-0 rounded-full overflow-hidden pointer-events-auto"
+              style={{
+                width: '75%',
+                aspectRatio: '1 / 1',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -65%)', // center horizontally, moved up slightly
+              }}
+            >
+              <LiquidChrome
+                baseColor={[1, 0.902, 0]}
+                speed={1.07}
+                amplitude={0.32}
+                interactive={true}
+              />
+            </div>
             
-            <img
-              src={heroBanner}
-              alt="Dopamint AI companion hero"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
               className="relative z-10 w-full h-auto pointer-events-none"
               style={{
                 objectFit: "contain",
                 objectPosition: "center",
                 display: "block",
+                transform: "scale(1.25) translateY(2%)",
               }}
-            />
+            >
+              {/* Safari / iOS / macOS (HEVC with Alpha) */}
+              <source src="/Banner-hevc.mp4" type='video/mp4; codecs="hvc1"' />
+              {/* Chrome / Edge / Firefox / Android (VP9 with Alpha) */}
+              <source src="/Banner-webm.webm" type="video/webm" />
+            </video>
           </div>
         </div>
       </div>

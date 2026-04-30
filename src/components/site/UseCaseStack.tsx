@@ -78,8 +78,17 @@ const StickyCard = ({
         className="relative flex flex-col md:flex-row w-full max-w-[90%] md:max-w-5xl h-[460px] md:h-[480px] origin-top overflow-hidden"
       >
         {isOutro ? (
-          <div className="w-full h-full flex items-center justify-center p-8 md:p-14 bg-primary text-ink">
-            <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }}>
+          <div className="relative w-full h-full flex items-center justify-center p-8 md:p-14 bg-primary text-ink overflow-hidden">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute bottom-0 left-4 md:left-8 w-40 md:w-56 h-auto object-contain z-0 pointer-events-none"
+            >
+              <source src="/juggling-loop.mp4" type="video/mp4" />
+            </video>
+            <h3 className="relative z-10" style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1, textAlign: "center" }}>
               {title}
             </h3>
           </div>
@@ -89,7 +98,7 @@ const StickyCard = ({
             <div className="w-full md:w-[45%] h-[45%] md:h-full border-b-2 md:border-b-0 md:border-r-2 border-ink bg-white overflow-hidden">
               <img src={src} alt={title} className="w-full h-full object-cover" />
             </div>
-            
+
             {/* RIGHT: Content */}
             <div className="w-full h-[55%] md:h-full md:w-[55%] flex flex-col justify-center p-6 md:p-14 bg-primary text-ink">
               <div className="flex items-center gap-4 mb-4 md:mb-6">
